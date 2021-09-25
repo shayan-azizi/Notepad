@@ -33,12 +33,24 @@ def new_file():
     my_text.delete("1.0", END)
     root.title("New File - Text Editor")
     status_bar.config(text="New File      ")
-
+    
+def open_file():
+    my_text.delete("1.0", END)
+    text_file = filedialog.askopenfilename(initialdir="F:/", title="Open File", filetypes=(("Python Files", "*.py"), ("Text Files", "*.txt"), ("HTML Files", "*.html"), ("All Files",  "*.*")))
+    name = text_file
+    status_bar.config(text=f'{name}     ')
+    name = name.replace("F:/", "")
+    root.title(f'{name} - Text Editor')
+    text_file = open(text_file, 'r')
+    stuff = text_file.read()
+    my_text.insert(END, stuff)
+    text_file.close()
+    
 # File Menu
 file_menu = Menu(my_menu ,tearoff=False)
 my_menu.add_cascade(label="File", menu=file_menu)
 file_menu.add_command(label="New File", command=new_file)
-file_menu.add_command(label="Open File")
+file_menu.add_command(label="Open File", command=open_file)
 file_menu.add_command(label="Save")
 file_menu.add_command(label="Save As")
 file_menu.add_separator()
