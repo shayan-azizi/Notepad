@@ -37,7 +37,7 @@ file_menu.add_command(label="New File")
 file_menu.add_command(label="Open File")
 file_menu.add_command(label="Save")
 file_menu.add_separator()
-file_menu.add_command(label="Quit")
+file_menu.add_command(label="Quit", command=root.quit)
 
 # Edit Menu
 edit_menu = Menu(my_menu, tearoff=False)
