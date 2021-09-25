@@ -6,7 +6,6 @@ from tkinter import font
 # Define Main Loop
 root = Tk()
 root.title("Lipbir - Text Editor")
-root.geometry("1200x660")
 
 # Create Main Frame
 my_frame = Frame(root)
