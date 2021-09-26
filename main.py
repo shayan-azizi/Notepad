@@ -36,7 +36,7 @@ def new_file():
     
 def open_file():
     my_text.delete("1.0", END)
-    text_file = filedialog.askopenfilename(initialdir="F:/", title="Open File", filetypes=(("Python Files", "*.py"), ("Text Files", "*.txt"), ("HTML Files", "*.html"), ("All Files",  "*.*")))
+    text_file = filedialog.askopenfilename(initialdir="", title="Open File", filetypes=(("Python Files", "*.py"), ("Text Files", "*.txt"), ("HTML Files", "*.html"), ("All Files",  "*.*")))
     name = text_file
     status_bar.config(text=f'{name}     ')
     name = name.replace("F:/", "")
@@ -45,6 +45,17 @@ def open_file():
     stuff = text_file.read()
     my_text.insert(END, stuff)
     text_file.close()
+
+def save_as_file():
+    text_file = filedialog.asksaveasfilename(defaultextension=".*", initialdir= "", title= "Save file", filetypes= (("Text Files", "*.txt"), ("Python Files", "*.py"), ("HTML Files", "*.html"), ("All Files", "*.*")))
+    if text_file:
+        name = text_file
+        status_bar.config(text=f'{name}     ')
+        name = name.replace("C:/", "")
+        root.title(f'{name} - Text Editor')
+        text_file = open(text_file, "w")
+        text_file.write(my_text.get(1.0 , END))
+        text_file.close()
     
 # File Menu
 file_menu = Menu(my_menu ,tearoff=False)
@@ -52,7 +63,7 @@ my_menu.add_cascade(label="File", menu=file_menu)
 file_menu.add_command(label="New File", command=new_file)
 file_menu.add_command(label="Open File", command=open_file)
 file_menu.add_command(label="Save")
-file_menu.add_command(label="Save As")
+file_menu.add_command(label="Save As", command=save_as_file)
 file_menu.add_separator()
 file_menu.add_command(label="Quit", command=root.quit)
 
