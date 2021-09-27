@@ -28,7 +28,7 @@ text_scroll.pack(side=RIGHT, fill=Y)
 
 
 # Create Text Box
-my_text = Text(my_frame, width=97, height=25, font=("Comic Sans MS", 16), selectbackground="Yellow", selectforeground="black", undo=True, yscrollcommand=text_scroll.set)
+my_text = Text(my_frame, width=97, height=25, font=("Consolas", 16), selectbackground="Yellow", selectforeground="black", undo=True, yscrollcommand=text_scroll.set)
 my_text.pack()
 
 
@@ -114,18 +114,21 @@ def paste_text (e):
             my_text.insert(position, selected)
 
 def quit_file (e):
+    print("are you sure?")
     root.quit()
     
  
 # File Menu
+
 file_menu = Menu(my_menu ,tearoff=False)
 my_menu.add_cascade(label="File", menu=file_menu) 
-file_menu.add_command(label="New File                Ctrl + N", command=new_file)
-file_menu.add_command(label="Open File               Ctrl + O", command=open_file)
-file_menu.add_command(label="Save                       Ctrl + S", command=save_file)
-file_menu.add_command(label="Save As     Ctrl + Shift + S", command=save_as_file)
+file_menu.add_command(label="New File                Ctrl + N", command=lambda: new_file(False))
+file_menu.add_command(label="Open File               Ctrl + O", command=lambda: open_file(False))
 file_menu.add_separator()
-file_menu.add_command(label="Quit                       Ctrl + Q", command=quit_file)
+file_menu.add_command(label="Save                       Ctrl + S", command=lambda: save_file(False))
+file_menu.add_command(label="Save As     Ctrl + Shift + S", command=lambda: save_as_file(False))
+file_menu.add_separator()
+file_menu.add_command(label="Quit                       Ctrl + Q", command=lambda: quit_file(False))
 
 # Edit Menu
 edit_menu = Menu(my_menu, tearoff=False)
