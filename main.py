@@ -119,15 +119,17 @@ def paste_text (e):
             position = my_text.index(INSERT)
             my_text.insert(position, selected)
 def quit_file (e):
-    sure = messagebox.askquestion('Confirmation', 'Do you want to quit?')
-    if sure == "yes":
+    sure = messagebox.askquestion('Confirmation', 'Do you want to save Changes?')
+    if sure == "no":
         root.quit()
+    elif sure == "yes":
+        save_as_file(e)
     
 def view_help ():
     wb.open("https://github.com/shayan-azizi/Notepad/blob/main/README.md")
 
 def send_feedback_help ():
-    wb.open("https://github.com/shayan-azizi/Notepad/issues")
+    wb.open("https://github.com/shayan-azizi/Notepad/issues")   
     
 def about_us_help ():
     wb.open("https://github.com/shayan-azizi/Notepad")
