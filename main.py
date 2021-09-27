@@ -14,6 +14,9 @@ root.iconbitmap("icon.ico")
 global open_status_name
 open_status_name = False
 
+global selected
+selected = False
+
 
 # Create Main Frame
 my_frame = Frame(root)
@@ -37,7 +40,7 @@ my_menu = Menu(root)
 root.config(menu=my_menu)
 
 # Add Menu Tools
-def new_file():
+def new_file(e):
     my_text.delete("1.0", END)
     root.title("New File - Text Editor")
     status_bar.config(text="New File      ")
@@ -45,7 +48,7 @@ def new_file():
     open_status_name = False
     
     
-def open_file():
+def open_file(e):
     my_text.delete("1.0", END)
     text_file = filedialog.askopenfilename(initialdir="", title="Open File", filetypes=(("Python Files", "*.py"), ("Text Files", "*.txt"), ("HTML Files", "*.html"), ("All Files",  "*.*")))
     if text_file:
@@ -60,7 +63,7 @@ def open_file():
     my_text.insert(END, stuff)
     text_file.close()
 
-def save_as_file():
+def save_as_file(e):
     text_file = filedialog.asksaveasfilename(defaultextension=".*", initialdir= "", title= "Save file", filetypes= (("Text Files", "*.txt"), ("Python Files", "*.py"), ("HTML Files", "*.html"), ("All Files", "*.*")))
     if text_file:
         name = text_file
@@ -71,7 +74,7 @@ def save_as_file():
         text_file.write(my_text.get(1.0 , END))
         text_file.close()
 
-def save_file():
+def save_file(e):
     global open_status_name
     if open_status_name:
         text_file = open(open_status_name, "w")
@@ -79,32 +82,74 @@ def save_file():
         text_file.close()
         status_bar.config(text=f'Saved:  {open_status_name}     ')
     else:
-        save_as_file()
+        save_as_file(e)
+        
+def cut_text (e):
+    global selected
+    if e:
+        selected = root.clipboard_get()
+    else:
+        if my_text.selection_get():
+            selected = my_text.selection_get()
+            my_text.delete("sel.first", "sel.last")
+            root.clipboard_clear()
+            root.clipboard_append(selected)
+
+def copy_text (e):
+    global selected
+    if e:
+        selected = root.clipboard_get()
+    if my_text.selection_get():
+        selected = my_text.selection_get()
+        root.clipboard_clear()
+        root.clipboard_append(selected)
+
+def paste_text (e):
+    global selected
+    if e:
+        selected = root.clipboard_get()
+    else:
+        if selected:
+            position = my_text.index(INSERT)
+            my_text.insert(position, selected)
+
+def quit_file (e):
+    root.quit()
+    
+ 
 # File Menu
 file_menu = Menu(my_menu ,tearoff=False)
 my_menu.add_cascade(label="File", menu=file_menu) 
-file_menu.add_command(label="New File", command=new_file)
-file_menu.add_command(label="Open File", command=open_file)
-file_menu.add_command(label="Save", command=save_file)
-file_menu.add_command(label="Save As", command=save_as_file)
+file_menu.add_command(label="New File                Ctrl + N", command=new_file)
+file_menu.add_command(label="Open File               Ctrl + O", command=open_file)
+file_menu.add_command(label="Save                       Ctrl + S", command=save_file)
+file_menu.add_command(label="Save As     Ctrl + Shift + S", command=save_as_file)
 file_menu.add_separator()
-file_menu.add_command(label="Quit", command=root.quit)
+file_menu.add_command(label="Quit                       Ctrl + Q", command=quit_file)
 
 # Edit Menu
 edit_menu = Menu(my_menu, tearoff=False)
 my_menu.add_cascade(label="Edit", menu=edit_menu)
-edit_menu.add_command(label="Undo")
-edit_menu.add_command(label="Redo")
+edit_menu.add_command(label="Undo                       Ctrl + Z")
+edit_menu.add_command(label="Redo                        Ctrl + Y")
 edit_menu.add_separator()
-edit_menu.add_command(label="Cut")
-edit_menu.add_command(label="Copy")
-edit_menu.add_command(label="Paste")
+edit_menu.add_command(label="Cut                           Ctrl + X", command=lambda: cut_text(False))
+edit_menu.add_command(label="Copy                         Ctrl + C", command=lambda: copy_text(False))
+edit_menu.add_command(label="Paste                        Ctrl + V", command=lambda: paste_text(False))
 
 
 # Create Statusbar At The Bottom Of App
 status_bar = Label(root, text= "Ready   ", anchor=E)
 status_bar.pack(fill=X, side=BOTTOM, ipady=5)
 
-
+# Bindings
+root.bind("<Control-x>", cut_text)
+root.bind("<Control-c>", copy_text)
+root.bind("<Control-v>", paste_text)
+root.bind("<Control-n>", new_file)
+root.bind("<Control-o>", open_file)
+root.bind("<Control-s>", save_file)
+root.bind("<Control-S>", save_as_file)
+root.bind("<Control-q>", quit_file)
 
 root.mainloop()
