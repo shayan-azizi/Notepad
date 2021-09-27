@@ -2,10 +2,18 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter import font
+import time
+import keyboard
 
 # Define Main Loop
 root = Tk()
 root.title("Lipbir - Text Editor")
+root.iconbitmap("icon.ico")
+
+# Set variable for open file name
+global open_status_name
+open_status_name = False
+
 
 # Create Main Frame
 my_frame = Frame(root)
@@ -33,10 +41,16 @@ def new_file():
     my_text.delete("1.0", END)
     root.title("New File - Text Editor")
     status_bar.config(text="New File      ")
+    global open_status_name
+    open_status_name = False
+    
     
 def open_file():
     my_text.delete("1.0", END)
     text_file = filedialog.askopenfilename(initialdir="", title="Open File", filetypes=(("Python Files", "*.py"), ("Text Files", "*.txt"), ("HTML Files", "*.html"), ("All Files",  "*.*")))
+    if text_file:
+        global open_status_name
+        open_status_name = text_file
     name = text_file
     status_bar.config(text=f'{name}     ')
     name = name.replace("F:/", "")
@@ -50,19 +64,28 @@ def save_as_file():
     text_file = filedialog.asksaveasfilename(defaultextension=".*", initialdir= "", title= "Save file", filetypes= (("Text Files", "*.txt"), ("Python Files", "*.py"), ("HTML Files", "*.html"), ("All Files", "*.*")))
     if text_file:
         name = text_file
-        status_bar.config(text=f'{name}     ')
+        status_bar.config(text=f'Saved:  {name}     ')
         name = name.replace("C:/", "")
         root.title(f'{name} - Text Editor')
         text_file = open(text_file, "w")
         text_file.write(my_text.get(1.0 , END))
         text_file.close()
-    
+
+def save_file():
+    global open_status_name
+    if open_status_name:
+        text_file = open(open_status_name, "w")
+        text_file.write(my_text.get(1.0 , END))
+        text_file.close()
+        status_bar.config(text=f'Saved:  {open_status_name}     ')
+    else:
+        save_as_file()
 # File Menu
 file_menu = Menu(my_menu ,tearoff=False)
-my_menu.add_cascade(label="File", menu=file_menu)
+my_menu.add_cascade(label="File", menu=file_menu) 
 file_menu.add_command(label="New File", command=new_file)
 file_menu.add_command(label="Open File", command=open_file)
-file_menu.add_command(label="Save")
+file_menu.add_command(label="Save", command=save_file)
 file_menu.add_command(label="Save As", command=save_as_file)
 file_menu.add_separator()
 file_menu.add_command(label="Quit", command=root.quit)
