@@ -1,14 +1,19 @@
 # import the modules
+import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
 from tkinter import font
+from tkinter import messagebox
 import time
-import keyboard
+import webbrowser as wb
+
 
 # Define Main Loop
 root = Tk()
 root.title("Lipbir - Text Editor")
 root.iconbitmap("icon.ico")
+root.geometry("1200x660")
+
 
 # Set variable for open file name
 global open_status_name
@@ -80,6 +85,7 @@ def save_file(e):
         text_file = open(open_status_name, "w")
         text_file.write(my_text.get(1.0 , END))
         text_file.close()
+        messagebox.showinfo('information', '     Saved     ')
         status_bar.config(text=f'Saved:  {open_status_name}     ')
     else:
         save_as_file(e)
@@ -112,11 +118,22 @@ def paste_text (e):
         if selected:
             position = my_text.index(INSERT)
             my_text.insert(position, selected)
-
 def quit_file (e):
-    print("are you sure?")
-    root.quit()
+    sure = messagebox.askquestion('Confirmation', 'Do you want to quit?')
+    if sure == "yes":
+        root.quit()
     
+def view_help ():
+    wb.open("https://github.com/shayan-azizi/Notepad/blob/main/README.md")
+
+def send_feedback_help ():
+    wb.open("https://github.com/shayan-azizi/Notepad/issues")
+    
+def about_us_help ():
+    wb.open("https://github.com/shayan-azizi/Notepad")
+    
+def font_format ():
+    pass
  
 # File Menu
 
@@ -140,6 +157,18 @@ edit_menu.add_command(label="Cut                           Ctrl + X", command=la
 edit_menu.add_command(label="Copy                         Ctrl + C", command=lambda: copy_text(False))
 edit_menu.add_command(label="Paste                        Ctrl + V", command=lambda: paste_text(False))
 
+# Format Menu
+format_menu = Menu(my_menu, tearoff=False)
+my_menu.add_cascade(label="Format", menu=format_menu)
+format_menu.add_command(label="Font...", command=font_format)
+
+# Help Menu
+help_menu = Menu(my_menu, tearoff= False)
+my_menu.add_cascade(label="Help", menu=help_menu)
+help_menu.add_command(label="View Help", command=view_help)
+help_menu.add_command(label="Send Feedback", command=send_feedback_help)
+help_menu.add_separator()
+help_menu.add_command(label="About us", command=about_us_help)
 
 # Create Statusbar At The Bottom Of App
 status_bar = Label(root, text= "Ready   ", anchor=E)
