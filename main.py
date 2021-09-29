@@ -141,23 +141,23 @@ def font_format ():
 
 file_menu = Menu(my_menu ,tearoff=False)
 my_menu.add_cascade(label="File", menu=file_menu) 
-file_menu.add_command(label="New File                Ctrl + N", command=lambda: new_file(False))
-file_menu.add_command(label="Open File               Ctrl + O", command=lambda: open_file(False))
+file_menu.add_command(label="New File", command=lambda: new_file(False), accelerator= "Ctrl + N")
+file_menu.add_command(label="Open File", command=lambda: open_file(False), accelerator= "Ctrl + O")
 file_menu.add_separator()
-file_menu.add_command(label="Save                       Ctrl + S", command=lambda: save_file(False))
-file_menu.add_command(label="Save As     Ctrl + Shift + S", command=lambda: save_as_file(False))
+file_menu.add_command(label="Save", command=lambda: save_file(False), accelerator= "Ctrl + S")
+file_menu.add_command(label="Save As", command=lambda: save_as_file(False), accelerator= "Ctrl + Shift + Y")
 file_menu.add_separator()
-file_menu.add_command(label="Quit                       Ctrl + Q", command=lambda: quit_file(False))
+file_menu.add_command(label="Quit", command=lambda: quit_file(False), accelerator= "Ctrl + Q")
 
 # Edit Menu
 edit_menu = Menu(my_menu, tearoff=False)
 my_menu.add_cascade(label="Edit", menu=edit_menu)
-edit_menu.add_command(label="Undo                       Ctrl + Z")
-edit_menu.add_command(label="Redo                        Ctrl + Y")
+edit_menu.add_command(label="Undo", command= my_text.edit_undo, accelerator= "Ctrl + Z")
+edit_menu.add_command(label="Redo", command= my_text.edit_redo, accelerator= "Ctrl + Y")
 edit_menu.add_separator()
-edit_menu.add_command(label="Cut                           Ctrl + X", command=lambda: cut_text(False))
-edit_menu.add_command(label="Copy                         Ctrl + C", command=lambda: copy_text(False))
-edit_menu.add_command(label="Paste                        Ctrl + V", command=lambda: paste_text(False))
+edit_menu.add_command(label="Cut", command=lambda: cut_text(False), accelerator= "Ctrl + X")
+edit_menu.add_command(label="Copy", command=lambda: copy_text(False), accelerator= "Ctrl + C")
+edit_menu.add_command(label="Paste", command=lambda: paste_text(False), accelerator= "Ctrl + V")
 
 # Format Menu
 format_menu = Menu(my_menu, tearoff=False)
