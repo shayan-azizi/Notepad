@@ -13,6 +13,7 @@ root = Tk()
 root.title("Lipbir - Text Editor")
 root.iconbitmap("icon.ico")
 root.geometry("1200x660")
+root.resizable(False, False)
 
 
 # Set variable for open file name
