@@ -8,12 +8,35 @@ import time
 import webbrowser as wb
 
 
+class LineNumbers(tk.Text):
+    def __init__(self, master, text_widget, **kwargs):
+        super().__init__(master, **kwargs)
+
+        self.text_widget = text_widget
+        self.text_widget.bind('<KeyPress>', self.on_key_press)
+
+        self.insert(1.0, '1')
+        self.configure(state='disabled')
+
+    def on_key_press(self, event=None):
+        final_index = str(self.text_widget.index(tk.END))
+        num_of_lines = final_index.split('.')[0]
+        line_numbers_string = "\n".join(str(no + 1) for no in range(int(num_of_lines)))
+        width = len(str(num_of_lines))
+
+        self.configure(state='normal', width=width)
+        self.delete(1.0, tk.END)
+        self.insert(1.0, line_numbers_string)
+        self.configure(state='disabled')
+
+
+
 # Define Main Loop
 root = Tk()
 root.title("Lipbir - Text Editor")
 root.iconbitmap("icon.ico")
 root.geometry("1200x660")
-root.resizable(False, False)
+# root.resizable(False, False)
 
 
 # Set variable for open file name
@@ -23,19 +46,41 @@ open_status_name = False
 global selected
 selected = False
 
+#
+
+is_dark = False
+
+def change_theme (e):
+    global is_dark
+    if is_dark == False:
+        my_text.config(insertbackground= "white", background= "#282923", foreground= "#a9b7c6")
+    else:
+        my_text.config(insertbackground= "black", background= "white", foreground= "black")
+    
+    is_dark = not is_dark
+        
+        
+
+bg_color = "white"
+cursor_color = "black"
+fg_color = "black"
+
 
 # Create Main Frame
-my_frame = Frame(root)
-my_frame.pack(pady=5)
+# my_frame = Frame(root)
+# my_frame.pack(pady=5)
 
 # Create Scrollbar
-text_scroll = Scrollbar(my_frame)
+text_scroll = Scrollbar(root)
 text_scroll.pack(side=RIGHT, fill=Y)
 
 
 # Create Text Box
-my_text = Text(my_frame, width=97, height=25, font=("Consolas", 16), selectbackground="Yellow", selectforeground="black", undo=True, yscrollcommand=text_scroll.set)
-my_text.pack()
+
+my_text = Text(root, width=97, height=25, insertbackground= cursor_color, font=("Consolas", 16), selectbackground="Yellow", selectforeground="black", foreground = fg_color, background = bg_color, undo=True, yscrollcommand=text_scroll.set)
+l = LineNumbers(root, my_text, width=1)
+l.pack(side=tk.LEFT)
+my_text.pack(expand=1)
 
 
 # Configure Scrollbar
@@ -46,6 +91,9 @@ my_menu = Menu(root)
 root.config(menu=my_menu)
 
 # Add Menu Tools
+
+
+
 def new_file(e):
     my_text.delete("1.0", END)
     root.title("New File - Text Editor")
@@ -148,6 +196,8 @@ file_menu.add_separator()
 file_menu.add_command(label="Save", command=lambda: save_file(False), accelerator= "Ctrl + S")
 file_menu.add_command(label="Save As", command=lambda: save_as_file(False), accelerator= "Ctrl + Shift + Y")
 file_menu.add_separator()
+file_menu.add_command(label = "Change The Theme", command = lambda: change_theme(False))
+file_menu.add_separator()
 file_menu.add_command(label="Quit", command=lambda: quit_file(False), accelerator= "Ctrl + Q")
 
 # Edit Menu
@@ -176,6 +226,7 @@ help_menu.add_command(label="About us", command=about_us_help)
 # Create Statusbar At The Bottom Of App
 status_bar = Label(root, text= "Ready   ", anchor=E)
 status_bar.pack(fill=X, side=BOTTOM, ipady=5)
+
 
 # Bindings
 root.bind("<Control-x>", cut_text)
