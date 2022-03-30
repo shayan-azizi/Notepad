@@ -1,7 +1,7 @@
 # Lipbir - text editor
 A plain text editor written in Python
 ## How to use it!?
-- At the first, you should download main.exe or main.py (you can not open main.exe in GNU/Linux or MacOs!)
+- At the first, you should download main.exe or main.py
 - Then you can use this Text Editor!
 ## Guide
 - This text editor has the ability to open all text files you should only press File menu and Open File!
